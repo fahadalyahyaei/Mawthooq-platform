@@ -46,3 +46,23 @@ Thawani
 رصيد مقدم الخدمة
  ↓
 تسوية/تحويل
+Users
+Providers
+Customers
+Categories
+Services
+Orders
+OrderItems
+Payments
+ProviderBalances
+Withdrawals
+Messages
+Attachments
+Reviews
+Disputes
+Notifications
+AdminUsers
+Roles
+Permissions
+AuditLogs
+Settings
