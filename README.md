@@ -1125,3 +1125,380 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 );
+import { useEffect, useMemo, useState } from 'react';
+
+const roles = {
+  owner: { label: 'المالك / المدير', name: 'فهد اليحيائي', permissions: ['dashboard', 'services', 'orders', 'users', 'settings'] },
+  student: { label: 'طالب', name: 'طالب موثوق', permissions: ['dashboard', 'services', 'orders'] },
+  provider: { label: 'مقدم خدمة', name: 'مقدم الخدمة', permissions: ['dashboard', 'provider-orders', 'services'] },
+};
+
+const services = [
+  { id: 1, name: 'البحوث والتقارير', desc: 'إعداد وتحليل البحوث والأطروحات بمحتوى احترافي.', icon: '📝', price: 'من 250 ر.ع' },
+  { id: 2, name: 'الدراسات الأكاديمية', desc: 'دعم مشاريع التخرج والدراسات الجامعية.', icon: '🎓', price: 'من 320 ر.ع' },
+  { id: 3, name: 'التحليل الإحصائي', desc: 'تحليل البيانات وتفسير النتائج بشكل دقيق.', icon: '📊', price: 'من 180 ر.ع' },
+  { id: 4, name: 'الرسائل العلمية', desc: 'مراجعة وتنسيق الرسائل العلمية والمشاريع.', icon: '📚', price: 'من 420 ر.ع' },
+];
+
+const initialOrders = [
+  { id: 'MW-1001', service: 'إعداد بحث أكاديمي', customer: 'أحمد محمد', provider: 'سارة علي', status: 'قيد التنفيذ', amount: '250 ر.ع', date: '19 سبتمبر 2026' },
+  { id: 'MW-1002', service: 'تحليل إحصائي', customer: 'نورة خالد', provider: 'مريم سالم', status: 'جديد', amount: '180 ر.ع', date: '18 سبتمبر 2026' },
+  { id: 'MW-1003', service: 'مراجعة رسالة علمية', customer: 'خالد راشد', provider: 'سارة علي', status: 'مكتمل', amount: '420 ر.ع', date: '17 سبتمبر 2026' },
+];
+
+const stats = [
+  { label: 'إيرادات اليوم', value: '12.4K', delta: '+18.2%', icon: '💰' },
+  { label: 'المستخدمون', value: '24.8K', delta: '+12.4%', icon: '👥' },
+  { label: 'الطلبات', value: '368', delta: '+8.1%', icon: '📦' },
+  { label: 'معدل التحويل', value: '7.6%', delta: '-2.3%', icon: '📈' },
+];
+
+function App() {
+  const [role, setRole] = useState(() => localStorage.getItem('mawthooq-role') || 'owner');
+  const [page, setPage] = useState('dashboard');
+  const [orders, setOrders] = useState(() => JSON.parse(localStorage.getItem('mawthooq-orders') || 'null') || initialOrders);
+  const [showRequest, setShowRequest] = useState(false);
+  const [notice, setNotice] = useState('');
+  const [query, setQuery] = useState('');
+
+  const currentRole = roles[role];
+  const can = (permission) => currentRole.permissions.includes(permission);
+
+  useEffect(() => {
+    localStorage.setItem('mawthooq-role', role);
+  }, [role]);
+
+  useEffect(() => {
+    localStorage.setItem('mawthooq-orders', JSON.stringify(orders));
+  }, [orders]);
+
+  const visibleOrders = useMemo(() => orders.filter((order) => Object.values(order).join(' ').toLowerCase().includes(query.toLowerCase())), [orders, query]);
+
+  const navigate = (nextPage) => {
+    if (can(nextPage)) setPage(nextPage);
+    else showNotice('ليس لديك صلاحية للوصول إلى هذه الصفحة.');
+  };
+
+  const showNotice = (message) => {
+    setNotice(message);
+    window.setTimeout(() => setNotice(''), 3500);
+  };
+
+  const createOrder = (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const order = {
+      id: `MW-${1000 + orders.length + 1}`,
+      service: form.get('service'),
+      customer: form.get('name'),
+      provider: 'بانتظار التعيين',
+      status: 'جديد',
+      amount: 'يحدد لاحقًا',
+      date: new Date().toLocaleDateString('ar-OM'),
+    };
+    setOrders((current) => [order, ...current]);
+    setShowRequest(false);
+    setPage('orders');
+    showNotice('تم إنشاء الطلب وحفظه بنجاح.');
+  };
+
+  const menu = [
+    ['dashboard', 'الرئيسية', '⌂'],
+    ['services', 'الخدمات', '▦'],
+    [role === 'provider' ? 'provider-orders' : 'orders', role === 'provider' ? 'طلبات العملاء' : 'الطلبات', '◫'],
+    ...(role === 'owner' ? [['users', 'المستخدمون', '♙'], ['settings', 'الإعدادات', '⚙']] : []),
+  ];
+
+  return (
+    <div className="admin-app">
+      <aside className="sidebar">
+        <div className="sidebar-brand"><span className="brand-mark">م</span><div><b>موثوق</b><small>لوحة الإدارة</small></div></div>
+        <div className="role-card"><span>الدور الحالي</span><strong>{currentRole.label}</strong><select value={role} onChange={(event) => { setRole(event.target.value); setPage('dashboard'); }} aria-label="اختيار الدور"><option value=\"owner\">المالك / المدير</option><option value=\"student\">طالب</option><option value=\"provider\">مقدم خدمة</option></select></div>
+        <nav className="side-nav">{menu.map(([id, label, icon]) => <button key={id} className={page === id ? 'selected' : ''} onClick={() => navigate(id)}><span>{icon}</span>{label}</button>)}</nav>
+        <div className="sidebar-footer"><span className=\"secure-dot\">●</span> الحساب محمي<br /><small>آخر دخول: اليوم 09:42</small></div>
+      </aside>
+
+      <div className="workspace">
+        <header className="admin-header"><div><span className="breadcrumb">موثوق / لوحة التحكم / </span><b>{menu.find(([id]) => id === page)?.[1] || 'الرئيسية'}</b></div><div className="header-tools"><label className="search-box">⌕<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="ابحث في المنصة..." /></label><button className="icon-btn">🔔</button><div className="profile"><span className="user-avatar">{currentRole.name.charAt(0)}</span><span><b>{currentRole.name}</b><small>{currentRole.label}</small></span></div></div></header>
+
+        <main className="workspace-content">
+          {page === 'dashboard' && <Dashboard role={role} stats={stats} orders={orders} onNew={() => setShowRequest(true)} onNavigate={navigate} />}
+          {page === 'services' && <Services canManage={role === 'owner'} onRequest={() => setShowRequest(true)} onNotice={showNotice} />}
+          {(page === 'orders' || page === 'provider-orders') && <Orders orders={visibleOrders} role={role} onNotice={showNotice} />}
+          {page === 'users' && can('users') && <Users onNotice={showNotice} />}
+          {page === 'settings' && can('settings') && <Settings onNotice={showNotice} />}
+        </main>
+      </div>
+
+      {showRequest && <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setShowRequest(false)}><form className="modal" onSubmit={createOrder}><div className="modal-head"><div><h2>إنشاء طلب خدمة</h2><p>أدخل بيانات الطلب وسيظهر في قائمة الطلبات.</p></div><button type=\"button\" className=\"close-btn\" onClick={() => setShowRequest(false)}>×</button></div><label>الخدمة<select name=\"service\" required>{services.map((service) => <option key={service.id}>{service.name}</option>)}</select></label><label>اسم الطالب<input name=\"name\" required placeholder=\"أدخل اسم الطالب\" /></label><label>تفاصيل الطلب<textarea name=\"details\" rows=\"4\" required placeholder=\"اكتب تفاصيل الخدمة المطلوبة...\" /></label><button className=\"primary-btn\" type=\"submit\">حفظ وإرسال الطلب</button></form></div>}
+      {notice && <div className=\"toast\">✓ {notice}</div>}
+    </div>
+  );
+}
+
+function Dashboard({ role, stats, orders, onNew, onNavigate }) {
+  return <>
+    <div className="page-title">
+      <div>
+        <span className="eyebrow">مرحبًا بك، {roles[role].name}</span>
+        <h1>لوحة التحكم</h1>
+        <p>تابع أداء المنصة والطلبات من مكان واحد.</p>
+      </div>
+      <button className="primary-btn" onClick={onNew}>＋ إنشاء طلب</button>
+    </div>
+
+    <div className="stats-grid admin-stats">
+      {stats.map((stat) => (
+        <div className="stat-card" key={stat.label}>
+          <div className="stat-head">
+            <span>{stat.label}</span>
+            <div className="stat-icon blue">{stat.icon}</div>
+          </div>
+          <div className="stat-value">{stat.value}</div>
+          <div className="trend green">{stat.delta}</div>
+        </div>
+      ))}
+    </div>
+
+    <div className="dashboard-two-col">
+      <div className="panel table-panel">
+        <div className="panel-head">
+          <div>
+            <h3>آخر الطلبات</h3>
+            <small>آخر تحديثات المنصة</small>
+          </div>
+          <button className="text-btn" onClick={() => onNavigate('orders')}>عرض الكل ←</button>
+        </div>
+        <OrderTable orders={orders.slice(0, 4)} />
+      </div>
+
+      <div className="panel insight-panel">
+        <div className="panel-head">
+          <div>
+            <h3>صلاحياتك</h3>
+            <small>الوصول حسب دورك</small>
+          </div>
+        </div>
+        <PermissionList role={role} />
+      </div>
+    </div>
+
+    <div className="panel chart-panel">
+      <div className="panel-head">
+        <div>
+          <h3>أداء المنصة</h3>
+          <small>آخر 7 أيام</small>
+        </div>
+        <span className="badge success">+24.8%</span>
+      </div>
+      <div className="chart-box">
+        <svg viewBox="0 0 700 260" preserveAspectRatio="none">
+          <path d="M0,200 C80,175 120,160 180,170 S280,120 340,140 S430,90 500,120 S620,70 700,90 L700,260 L0,260 Z" fill="rgba(96,165,250,.16)" />
+          <path d="M0,200 C80,175 120,160 180,170 S280,120 340,140 S430,90 500,120 S620,70 700,90" fill="none" stroke="#2486c7" strokeWidth="4" strokeLinecap="round" />
+        </svg>
+      </div>
+    </div>
+  </>;
+}
+
+function Services({ canManage, onRequest, onNotice }) {
+  return <>
+    <PageIntro title="الخدمات" text="إدارة الخدمات الأكاديمية واستقبال الطلبات." action={canManage ? '＋ إضافة خدمة' : null} onAction={() => onNotice('يمكنك إضافة خدمات جديدة من هنا بعد ربط قاعدة البيانات.')} />
+    <div className="service-grid">
+      {services.map((service) => (
+        <article className="service-card large" key={service.id}>
+          <div className="service-head">
+            <span className="service-icon">{service.icon}</span>
+            <div>
+              <h3>{service.name}</h3>
+              <span className="service-price">{service.price}</span>
+            </div>
+          </div>
+          <p>{service.desc}</p>
+          <div className="service-actions">
+            <button className="primary-btn" onClick={onRequest}>طلب الخدمة</button>
+            {canManage && <button className="secondary-btn" onClick={() => onNotice('تم فتح محرر الخدمة.')}>تعديل</button>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </>;
+}
+
+function Orders({ orders, role, onNotice }) {
+  return <>
+    <PageIntro title={role === 'provider' ? 'طلبات العملاء' : 'الطلبات'} text={role === 'provider' ? 'راجع الطلبات المسندة إليك وحدّث حالتها.' : 'متابعة كل الطلبات المقدمة عبر المنصة.'} />
+    <div className="panel table-panel">
+      <div className="panel-head">
+        <div>
+          <h3>قائمة الطلبات</h3>
+          <small>{orders.length} طلب</small>
+        </div>
+        <button className="secondary-btn" onClick={() => onNotice('سيتم تصدير البيانات بصيغة CSV بعد ربط الخادم.')}>تصدير CSV</button>
+      </div>
+      <OrderTable orders={orders} onStatus={() => onNotice('تم تحديث حالة الطلب محليًا.')} />
+    </div>
+  </>;
+}
+
+function OrderTable({ orders, onStatus }) {
+  return (
+    <div className="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>الخدمة</th>
+            <th>الطالب</th>
+            <th>مقدم الخدمة</th>
+            <th>المبلغ</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order.id}>
+              <td><b>{order.id}</b></td>
+              <td>{order.service}</td>
+              <td>{order.customer}</td>
+              <td>{order.provider}</td>
+              <td>{order.amount}</td>
+              <td>
+                <button className={`status ${order.status === 'مكتمل' ? 'done' : order.status === 'جديد' ? 'progress' : 'pending'}`} onClick={onStatus}>{order.status}</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function Users({ onNotice }) {
+  return <>
+    <PageIntro title="المستخدمون" text="إدارة الطلاب ومقدمي الخدمات وصلاحياتهم." action="＋ إضافة مستخدم" onAction={() => onNotice('سيتم فتح نموذج إضافة مستخدم.')} />
+    <div className="user-grid">
+      {[
+        ['👨‍🎓','طلاب مسجلون','1,248','نشط'],
+        ['🧑‍💻','مقدمو خدمات','86','تم التحقق'],
+        ['⏳','طلبات تحقق','12','تحتاج مراجعة']
+      ].map(([icon, title, number, status]) => (
+        <div className="user-stat" key={title}>
+          <span className="service-icon">{icon}</span>
+          <div>
+            <small>{title}</small>
+            <strong>{number}</strong>
+            <span className="badge success">{status}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div className="panel permission-panel">
+      <div className="panel-head">
+        <div>
+          <h3>مصفوفة الصلاحيات</h3>
+          <small>تحكم بصلاحيات الفئات</small>
+        </div>
+      </div>
+      <PermissionTable />
+    </div>
+  </>;
+}
+
+function PermissionTable() {
+  return (
+    <div className="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>الفئة</th>
+            <th>لوحة التحكم</th>
+            <th>إدارة الطلبات</th>
+            <th>إدارة المستخدمين</th>
+            <th>الإعدادات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>المالك / المدير</b></td>
+            <td>✓</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+          <tr>
+            <td><b>الطالب</b></td>
+            <td>✓</td>
+            <td>✓</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><b>مقدم الخدمة</b></td>
+            <td>✓</td>
+            <td>طلبات العملاء</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function Settings({ onNotice }) {
+  return <>
+    <PageIntro title="الإعدادات" text="إعدادات الحساب والمنصة والإشعارات." />
+    <div className="settings-grid">
+      <div className="panel settings-card">
+        <h3>ملف المالك</h3>
+        <label>الاسم<input defaultValue="فهد اليحيائي" /></label>
+        <label>البريد الإلكتروني<input defaultValue="admin@mawthooq.om" type="email" /></label>
+        <button className="primary-btn" onClick={() => onNotice('تم حفظ إعدادات الحساب.')}>حفظ التعديلات</button>
+      </div>
+
+      <div className="panel settings-card">
+        <h3>الأمان والصلاحيات</h3>
+        <label className="switch-row"><span>المصادقة الثنائية</span><input type="checkbox" defaultChecked /></label>
+        <label className="switch-row"><span>تنبيهات الطلبات</span><input type="checkbox" defaultChecked /></label>
+        <p className="muted">للتشغيل الفعلي، اربط هذه الواجهة بخادم مصادقة وقاعدة بيانات.</p>
+      </div>
+    </div>
+  </>;
+}
+
+function PageIntro({ title, text, action, onAction }) {
+  return (
+    <div className="page-title">
+      <div>
+        <span className="eyebrow">منصة موثوق</span>
+        <h1>{title}</h1>
+        <p>{text}</p>
+      </div>
+      {action && <button className="primary-btn" onClick={onAction}>{action}</button>}
+    </div>
+  );
+}
+
+function PermissionList({ role }) {
+  return (
+    <div className="permission-list">
+      {roles[role].permissions.map((item) => (
+        <div key={item}>
+          <span className="permission-check">✓</span>
+          <span>{{
+            dashboard: 'لوحة المؤشرات',
+            services: 'استعراض الخدمات',
+            orders: 'إدارة الطلبات',
+            'provider-orders': 'طلبات العملاء',
+            users: 'إدارة المستخدمين',
+            settings: 'إعدادات المنصة'
+          }[item]}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default App;
