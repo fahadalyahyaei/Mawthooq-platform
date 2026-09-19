@@ -2341,3 +2341,12 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+# Mawthooq Platform
+
+منصة رقمية للخدمات الأكاديمية في سلطنة عُمان، تربط الطلاب بمقدمي الخدمات.
+
+## التشغيل محليًا
+
+```bash
+npm install
+npm run dev
