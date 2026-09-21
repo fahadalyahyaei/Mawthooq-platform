@@ -34,6 +34,14 @@ const projects = [
   { name: 'تجربة المستخدم', owner: 'لينا', progress: '93%', status: 'مكتمل', statusClass: 'done' },
 ];
 
+const trustBadges = ['A+ جودة التنفيذ', '24/7 دعم', 'سجل موثوق 99.9%'];
+
+const highlights = [
+  { title: 'تحسين معدلات التحويل', value: '+42%', detail: 'بفضل تحسين تجربة المستخدم وعمليات التسليم', icon: '🚀' },
+  { title: 'وقت الاستجابة', value: '1.8h', detail: 'متوسط زمن الرد على الطلبات الجديدة', icon: '⚡' },
+  { title: 'رضا العملاء', value: '96%', detail: 'مؤشر رضا مستمر خلال الربع الحالي', icon: '⭐' },
+];
+
 function App() {
   const [form, setForm] = useState({
     service: 'البحوث والتقارير',
@@ -100,6 +108,11 @@ function App() {
                 <button className="primary-btn">إنشاء طلب جديد</button>
                 <button className="secondary-btn">استعراض الخدمات</button>
               </div>
+              <div className="trust-row">
+                {trustBadges.map((badge) => (
+                  <span key={badge} className="trust-badge">✓ {badge}</span>
+                ))}
+              </div>
             </div>
 
             <div className="overview-card">
@@ -134,6 +147,25 @@ function App() {
                 </div>
                 <span className="mini-status new">جديد</span>
               </div>
+            </div>
+          </div>
+
+          <div className="panel highlights-panel">
+            <div className="panel-head">
+              <div>
+                <h3>أبرز المؤشرات</h3>
+                <small>مقاييس الأداء الرئيسية</small>
+              </div>
+            </div>
+            <div className="highlights-grid">
+              {highlights.map((item) => (
+                <div className="highlight-card" key={item.title}>
+                  <div className="highlight-icon">{item.icon}</div>
+                  <div className="highlight-value">{item.value}</div>
+                  <div className="highlight-title">{item.title}</div>
+                  <small>{item.detail}</small>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -227,9 +259,122 @@ function App() {
               </table>
             </div>
           </div>
+
+          <div className="panel products-panel" id="services">
+            <div className="panel-head">
+              <div>
+                <h3>المنتجات والخدمات</h3>
+                <small>حلول مخصصة للتنفيذ والتوسع</small>
+              </div>
+              <span className="badge blue">منتجات مميزة</span>
+            </div>
+
+            <div className="product-grid">
+              {services.map((service) => (
+                <div className="product-card" key={service.name}>
+                  <div className="product-card-top">
+                    <span className="service-icon">{service.icon}</span>
+                    <span className="service-tag">مميز</span>
+                  </div>
+                  <h4>{service.name}</h4>
+                  <p>{service.desc}</p>
+                  <div className="product-meta">
+                    <span>{service.price}</span>
+                    <button>اطلب الآن</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="panel products-panel" id="services">
+            <div className="panel-head">
+              <div>
+                <h3>المنتجات والخدمات</h3>
+                <small>حلول مخصصة للتنفيذ والتوسع</small>
+              </div>
+              <span className="badge blue">منتجات مميزة</span>
+            </div>
+
+            <div className="product-grid">
+              {services.map((service) => (
+                <div className="product-card" key={service.name}>
+                  <div className="product-card-top">
+                    <span className="service-icon">{service.icon}</span>
+                    <span className="service-tag">مميز</span>
+                  </div>
+                  <h4>{service.name}</h4>
+                  <p>{service.desc}</p>
+                  <div className="product-meta">
+                    <span>{service.price}</span>
+                    <button>اطلب الآن</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         <aside className="side-column">
+          <div className="panel small-panel sidebar-panel">
+            <div className="sidebar-brand">
+              <div className="brand-mark">م</div>
+              <div>
+                <strong>موثوق</strong>
+                <small>Executive Suite</small>
+              </div>
+            </div>
+
+            <nav className="sidebar-nav" aria-label="القائمة الجانبية">
+              <a href="#" className="side-link active">لوحة التحكم</a>
+              <a href="#services" className="side-link">المنتجات</a>
+              <a href="#dashboard" className="side-link">الإحصاءات</a>
+              <a href="#orders" className="side-link">المشاريع</a>
+              <a href="#team" className="side-link">الفريق</a>
+              <a href="#" className="side-link">الإعدادات</a>
+            </nav>
+
+            <div className="mini-summary">
+              <div className="mini-stat">
+                <span>إنتاج</span>
+                <strong>86%</strong>
+              </div>
+              <div className="mini-stat">
+                <span>التسليم</span>
+                <strong>12 يوم</strong>
+              </div>
+            </div>
+          </div>
+          <div className="panel small-panel sidebar-panel">
+            <div className="sidebar-brand">
+              <div className="brand-mark">م</div>
+              <div>
+                <strong>موثوق</strong>
+                <small>Executive Suite</small>
+              </div>
+            </div>
+
+            <nav className="sidebar-nav" aria-label="القائمة الجانبية">
+              <a href="#" className="side-link active">لوحة التحكم</a>
+              <a href="#services" className="side-link">المنتجات</a>
+              <a href="#dashboard" className="side-link">الإحصاءات</a>
+              <a href="#orders" className="side-link">المشاريع</a>
+              <a href="#team" className="side-link">الفريق</a>
+              <a href="#" className="side-link">الإعدادات</a>
+            </nav>
+
+            <div className="mini-summary">
+              <div className="mini-stat">
+                <span>إنتاج</span>
+                <strong>86%</strong>
+              </div>
+              <div className="mini-stat">
+                <span>التسليم</span>
+                <strong>12 يوم</strong>
+              </div>
+            </div>
+          </div>
+
           <div className="panel small-panel">
             <div className="panel-head">
               <div>
@@ -274,31 +419,6 @@ function App() {
                     <small>{item.time}</small>
                   </div>
                   <span className="mini-tag">{item.tag}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel small-panel" id="services">
-            <div className="panel-head">
-              <div>
-                <h3>السوق والخدمات</h3>
-                <small>خدمات متاحة الآن</small>
-              </div>
-            </div>
-
-            <div className="service-list">
-              {services.map((service) => (
-                <div className="service-card" key={service.name}>
-                  <div className="service-head">
-                    <span className="service-icon">{service.icon}</span>
-                    <strong>{service.name}</strong>
-                  </div>
-                  <p>{service.desc}</p>
-                  <div className="service-foot">
-                    <span>{service.price}</span>
-                    <button>طلب</button>
-                  </div>
                 </div>
               ))}
             </div>
