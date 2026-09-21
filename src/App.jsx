@@ -11,25 +11,32 @@ const features = [
   {
     icon: '📚',
     title: 'خدمات أكاديمية متكاملة',
-    text: 'نوفر لك خدمات البحث العلمي، التوثيق، المراجعة، والدعم الأكاديمي بكل احترافية.',
+    text: 'نقدم خدمات البحث العلمي، التوثيق، المراجعة، والدعم الأكاديمي عبر منصة احترافية وسريعة.',
   },
   {
     icon: '⚡',
-    title: 'تجربة سريعة وسهلة',
-    text: 'واجهة مستخدم واضحة، تنقل سلس، وعمليات مريحة تدعم الطالب والباحث بشكل فوري.',
+    title: 'تجربة سهلة ومباشرة',
+    text: 'واجهة مستخدم واضحة، تشغيل سريع، ومتابعة دقيقة تجعل كل طلبك أكثر وضوحًا وفعالية.',
   },
   {
     icon: '🔒',
     title: 'أمان وخصوصية',
-    text: 'نراعي خصوصية بيانات المستخدمين ونضمن بيئة آمنة ومطمئنة في جميع المعاملات.',
+    text: 'نحافظ على سرية بياناتك ونعمل على بيئة آمنة ومطمئنة في كل التفاعل.',
   },
 ];
 
 const services = [
-  { name: 'البحوث العلمية', price: 'من 250 ر.ع' },
-  { name: 'المراجعات الأكاديمية', price: 'من 180 ر.ع' },
-  { name: 'الرسائل الجامعية', price: 'من 420 ر.ع' },
-  { name: 'التحليل الإحصائي', price: 'من 220 ر.ع' },
+  { name: 'البحوث العلمية', price: 'من 250 ر.ع', icon: '📘' },
+  { name: 'المراجعات الأكاديمية', price: 'من 180 ر.ع', icon: '📝' },
+  { name: 'الرسائل الجامعية', price: 'من 420 ر.ع', icon: '🎓' },
+  { name: 'التحليل الإحصائي', price: 'من 220 ر.ع', icon: '📊' },
+];
+
+const process = [
+  { step: '01', title: 'تقديم الطلب', text: 'تحديد نوع الخدمة والاحتياج الأكاديمي بكل وضوح.' },
+  { step: '02', title: 'تقييم سريع', text: 'فريقنا يراجع الطلب ويحدد الوقت والتكلفة المناسبة.' },
+  { step: '03', title: 'التنفيذ', text: 'نقوم بالعمل بشكل احترافي وفق المعايير الأكاديمية المطلوبة.' },
+  { step: '04', title: 'التسليم', text: 'استلام النتيجة النهائية مع متابعة وتعديلات عند الحاجة.' },
 ];
 
 function App() {
@@ -37,7 +44,7 @@ function App() {
     <div className="landing-page">
       <header className="topbar">
         <div className="container nav-wrap">
-          <div className="brand">
+          <div className="brand" aria-label="شعار المنصة">
             <div className="brand-mark">م</div>
             <div>
               <div className="brand-name">موثوق</div>
@@ -45,31 +52,32 @@ function App() {
             </div>
           </div>
 
-          <nav className="nav-links" aria-label="التنقل">
+          <nav className="nav-links" aria-label="التنقل بين الصفحات">
             <a href="#home" className="active">الرئيسية</a>
             <a href="#services">الخدمات</a>
             <a href="#about">من نحن</a>
+            <a href="#process">العملية</a>
             <a href="#contact">تواصل معنا</a>
           </nav>
 
-          <button className="primary-btn small-btn">ابدأ الآن</button>
+          <button className="primary-btn nav-cta">ابدأ الآن</button>
         </div>
       </header>
 
       <main className="container hero" id="home">
         <div className="hero-copy">
-          <span className="eyebrow">منصة رقمية أكاديمية متكاملة</span>
+          <span className="eyebrow">منصة خدمات أكاديمية رقمية</span>
           <h1>
-            بناؤك الأكاديمي يبدأ من <span>مكانٍ موثوق</span>
+            نُسهّل رحلتك الأكاديمية <span>بخبرة موثوقة</span>
           </h1>
           <p>
-            نقدم لك خدمات تعليمية وبحثية احترافية تدعم طلابك والباحثين والجهات الأكاديمية
-            في كل خطوة، عبر منصة ذكية وسهلة الاستخدام.
+            نقدم خدمات تعليمية وبحثية احترافية تدعم الطلاب والباحثين والجامعات، عبر تجربة
+            رقمية متكاملة تجمع الجودة، السرعة، والاعتمادية في مكان واحد.
           </p>
 
           <div className="hero-actions">
             <button className="primary-btn">احجز الخدمة</button>
-            <button className="secondary-btn">استعرض الخدمات</button>
+            <button className="secondary-btn">استعراض الخدمات</button>
           </div>
 
           <div className="mini-trust">
@@ -79,12 +87,12 @@ function App() {
             </div>
             <div>
               <strong>24/7</strong>
-              <span>دعم فني مستمر</span>
+              <span>دعم مستمر</span>
             </div>
           </div>
         </div>
 
-        <div className="hero-card">
+        <div className="hero-visual" aria-label="لوحة حالة الطلبات">
           <div className="glass-panel">
             <div className="card-head">
               <span className="status-dot" />
@@ -116,6 +124,16 @@ function App() {
                 <small>مراجعة نهائية</small>
               </div>
               <span className="chip chip-gold">قريب</span>
+            </div>
+
+            <div className="progress-ring-wrap">
+              <div className="progress-ring">
+                <span>92%</span>
+              </div>
+              <div className="progress-text">
+                <strong>معدل الرضا</strong>
+                <small>من العملاء</small>
+              </div>
             </div>
           </div>
         </div>
@@ -160,13 +178,34 @@ function App() {
           <div className="service-grid">
             {services.map((service) => (
               <div className="service-card" key={service.name}>
-                <div className="service-badge">{service.name}</div>
+                <div className="service-icon-box">{service.icon}</div>
                 <h3>{service.name}</h3>
-                <p>خدمة دقيقة ومخصصة لتلبية متطلباتك الأكاديمية، مع متابعة مستمرة وجودة عالية.</p>
+                <p>
+                  خدمة دقيقة ومخصصة لتلبية متطلباتك الأكاديمية مع متابعة مستمرة وجودة عالية.
+                </p>
                 <div className="service-footer">
                   <strong>{service.price}</strong>
                   <button>طلب الخدمة</button>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="process-section" id="process">
+        <div className="container">
+          <div className="section-heading center">
+            <span>كيف نعمل؟</span>
+            <h2>عملية واضحة، سریعة، واحترافية</h2>
+          </div>
+
+          <div className="process-grid">
+            {process.map((item) => (
+              <div className="process-card" key={item.step}>
+                <span className="process-step">{item.step}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
               </div>
             ))}
           </div>
