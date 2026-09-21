@@ -1,233 +1,88 @@
+import { useState } from 'react';
 import './styles.css';
 
 const stats = [
-  { label: 'الطلاب المسجلين', value: '24.8K', icon: '🎓' },
-  { label: 'الخدمات المنجزة', value: '3.6K', icon: '✅' },
-  { label: 'الجامعات المتعاقدة', value: '120', icon: '🏛️' },
-  { label: 'رضا العملاء', value: '96%', icon: '⭐' },
-];
-
-const features = [
-  {
-    icon: '📚',
-    title: 'خدمات أكاديمية متكاملة',
-    text: 'نقدم خدمات البحث العلمي، التوثيق، المراجعة، والدعم الأكاديمي عبر منصة احترافية وسريعة.',
-  },
-  {
-    icon: '⚡',
-    title: 'تجربة سهلة ومباشرة',
-    text: 'واجهة مستخدم واضحة، تشغيل سريع، ومتابعة دقيقة تجعل كل طلبك أكثر وضوحًا وفعالية.',
-  },
-  {
-    icon: '🔒',
-    title: 'أمان وخصوصية',
-    text: 'نحافظ على سرية بياناتك ونعمل على بيئة آمنة ومطمئنة في كل التفاعل.',
-  },
+  { label: 'طالب وباحث', value: '24.8K', icon: '🎓' },
+  { label: 'خدمة منجزة', value: '3.6K', icon: '✓' },
+  { label: 'جهة أكاديمية', value: '120+', icon: '⌂' },
+  { label: 'معدل الرضا', value: '96%', icon: '★' },
 ];
 
 const services = [
-  { name: 'البحوث العلمية', price: 'من 250 ر.ع', icon: '📘' },
-  { name: 'المراجعات الأكاديمية', price: 'من 180 ر.ع', icon: '📝' },
-  { name: 'الرسائل الجامعية', price: 'من 420 ر.ع', icon: '🎓' },
-  { name: 'التحليل الإحصائي', price: 'من 220 ر.ع', icon: '📊' },
+  { name: 'البحوث والتقارير', icon: '▤', price: 'من 250 ر.ع', description: 'إعداد ومراجعة البحوث والتقارير بأسلوب أكاديمي منظم.' },
+  { name: 'التحليل الإحصائي', icon: '◒', price: 'من 180 ر.ع', description: 'تحليل البيانات وتفسير النتائج باستخدام منهجية دقيقة.' },
+  { name: 'الرسائل الجامعية', icon: '◇', price: 'من 420 ر.ع', description: 'دعم متكامل لمشاريع التخرج والرسائل العلمية.' },
+  { name: 'التدقيق والتنسيق', icon: '✓', price: 'من 120 ر.ع', description: 'تدقيق لغوي وتنسيق أكاديمي وفق المتطلبات الجامعية.' },
 ];
 
-const process = [
-  { step: '01', title: 'تقديم الطلب', text: 'تحديد نوع الخدمة والاحتياج الأكاديمي بكل وضوح.' },
-  { step: '02', title: 'تقييم سريع', text: 'فريقنا يراجع الطلب ويحدد الوقت والتكلفة المناسبة.' },
-  { step: '03', title: 'التنفيذ', text: 'نقوم بالعمل بشكل احترافي وفق المعايير الأكاديمية المطلوبة.' },
-  { step: '04', title: 'التسليم', text: 'استلام النتيجة النهائية مع متابعة وتعديلات عند الحاجة.' },
+const steps = [
+  ['01', 'أرسل طلبك', 'حدد الخدمة وأرفق تفاصيل احتياجك الأكاديمي.'],
+  ['02', 'نراجع الطلب', 'يتواصل معك فريق موثوق لتأكيد التفاصيل والتكلفة.'],
+  ['03', 'ننفذ باحتراف', 'يعمل المختصون على طلبك وفق معايير الجودة.'],
+  ['04', 'تستلم بثقة', 'تستلم العمل مع إمكانية المراجعة والدعم.'],
 ];
 
 function App() {
+  const [form, setForm] = useState({ service: services[0].name, name: '', email: '', details: '' });
+  const [submitted, setSubmitted] = useState(false);
+
+  const updateForm = (event) => {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+    setSubmitted(false);
+  };
+
+  const submitRequest = (event) => {
+    event.preventDefault();
+    setSubmitted(true);
+  };
+
   return (
     <div className="landing-page">
+      <div className="top-strip"><div className="container">منصة موثوق للخدمات الأكاديمية في سلطنة عُمان <span>● دعم متاح الآن</span></div></div>
       <header className="topbar">
         <div className="container nav-wrap">
-          <div className="brand" aria-label="شعار المنصة">
+          <a className="brand" href="#home" aria-label="موثوق">
             <div className="brand-mark">م</div>
-            <div>
-              <div className="brand-name">موثوق</div>
-              <small>Academic Platform</small>
-            </div>
-          </div>
-
-          <nav className="nav-links" aria-label="التنقل بين الصفحات">
-            <a href="#home" className="active">الرئيسية</a>
-            <a href="#services">الخدمات</a>
-            <a href="#about">من نحن</a>
-            <a href="#process">العملية</a>
-            <a href="#contact">تواصل معنا</a>
+            <div><b>موثوق</b><small>MAWTHOOQ</small></div>
+          </a>
+          <nav className="nav-links" aria-label="التنقل">
+            <a href="#home" className="active">الرئيسية</a><a href="#services">الخدمات</a><a href="#about">عن موثوق</a><a href="#steps">كيف نعمل؟</a><a href="#request">طلب خدمة</a>
           </nav>
-
-          <button className="primary-btn nav-cta">ابدأ الآن</button>
+          <a className="primary-btn nav-cta" href="#request">ابدأ طلبك <span>←</span></a>
         </div>
       </header>
 
-      <main className="container hero" id="home">
-        <div className="hero-copy">
-          <span className="eyebrow">منصة خدمات أكاديمية رقمية</span>
-          <h1>
-            نُسهّل رحلتك الأكاديمية <span>بخبرة موثوقة</span>
-          </h1>
-          <p>
-            نقدم خدمات تعليمية وبحثية احترافية تدعم الطلاب والباحثين والجامعات، عبر تجربة
-            رقمية متكاملة تجمع الجودة، السرعة، والاعتمادية في مكان واحد.
-          </p>
-
-          <div className="hero-actions">
-            <button className="primary-btn">احجز الخدمة</button>
-            <button className="secondary-btn">استعراض الخدمات</button>
+      <main id="home">
+        <section className="hero container">
+          <div className="hero-copy">
+            <div className="eyebrow"><span>✦</span> شريكك الأكاديمي الموثوق</div>
+            <h1>نحوّل طموحك الأكاديمي إلى <em>إنجاز موثوق</em></h1>
+            <p>منصة عُمانية تجمعك بخدمات أكاديمية احترافية، مصممة لتمنحك الجودة والوضوح والدعم في كل خطوة من رحلتك التعليمية.</p>
+            <div className="hero-actions"><a className="primary-btn" href="#request">اطلب خدمتك الآن <span>←</span></a><a className="secondary-btn" href="#services">اكتشف خدماتنا <span>↓</span></a></div>
+            <div className="trust-row"><div className="avatars"><i>م</i><i>س</i><i>أ</i><b>+24K</b></div><div><strong>يثق بنا الطلاب والباحثون</strong><small>تجربة أكاديمية تبدأ بالثقة</small></div></div>
           </div>
-
-          <div className="mini-trust">
-            <div>
-              <strong>4.9/5</strong>
-              <span>تقييم المستخدمين</span>
-            </div>
-            <div>
-              <strong>24/7</strong>
-              <span>دعم مستمر</span>
+          <div className="hero-visual">
+            <div className="glow glow-one" /><div className="glow glow-two" />
+            <div className="dashboard-card">
+              <div className="dashboard-top"><div><small>لوحة المتابعة</small><strong>مرحباً بك في موثوق</strong></div><div className="mark-small">م</div></div>
+              <div className="completion"><div><small>إنجاز الطلبات</small><strong>92%</strong></div><div className="bar"><span /></div><small>تحسن هذا الشهر <b>+18%</b></small></div>
+              <div className="request-preview"><div className="preview-head"><strong>آخر الطلبات</strong><span>عرض الكل</span></div>{['بحث أكاديمي', 'تحليل إحصائي', 'رسالة جامعية'].map((item, index) => <div className="preview-row" key={item}><span className={`preview-icon p${index}`}>{['▤', '◒', '◇'][index]}</span><div><b>{item}</b><small>{['قيد التنفيذ', 'جاهز للتسليم', 'مراجعة نهائية'][index]}</small></div><span className={`request-status s${index}`}>{['متقدم', 'جاهز', 'قريب'][index]}</span></div>)}</div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className="hero-visual" aria-label="لوحة حالة الطلبات">
-          <div className="glass-panel">
-            <div className="card-head">
-              <span className="status-dot" />
-              <span>حالة الطلبات</span>
-            </div>
+        <section className="stats-wrap"><div className="container stats-grid">{stats.map((item) => <div className="stat-card" key={item.label}><span className="stat-icon">{item.icon}</span><div><strong>{item.value}</strong><small>{item.label}</small></div></div>)}</div></section>
 
-            <div className="request-box">
-              <div className="request-icon">📄</div>
-              <div>
-                <strong>بحث أكاديمي</strong>
-                <small>قيد التنفيذ</small>
-              </div>
-              <span className="chip chip-blue">متقدم</span>
-            </div>
+        <section className="section container" id="about"><div className="section-heading"><div><span className="section-kicker">لماذا موثوق؟</span><h2>كل ما تحتاجه لرحلة أكاديمية <em>أكثر وضوحاً</em></h2></div><p>نؤمن أن الوصول إلى الخدمة الأكاديمية المناسبة يجب أن يكون سهلاً، آمناً، وموثوقاً.</p></div><div className="value-grid"><article><span>01</span><h3>جودة نعتز بها</h3><p>نختار الخبرات والكفاءات بعناية لنقدم نتائج تليق بطموحك.</p></article><article><span>02</span><h3>وضوح في كل خطوة</h3><p>أسعار واضحة، متابعة مستمرة، وتواصل مباشر من البداية حتى التسليم.</p></article><article><span>03</span><h3>حلول تناسبك</h3><p>خدمات مرنة تناسب الطلاب والباحثين والمؤسسات الأكاديمية.</p></article></div></section>
 
-            <div className="request-box">
-              <div className="request-icon alt">📊</div>
-              <div>
-                <strong>تحليل إحصائي</strong>
-                <small>جاهز للتسليم</small>
-              </div>
-              <span className="chip chip-green">جاهز</span>
-            </div>
+        <section className="services-section" id="services"><div className="container"><div className="section-heading light"><div><span className="section-kicker">خدماتنا الأكاديمية</span><h2>نضع خبرتنا بين يديك</h2></div><p>اختر الخدمة التي تناسب احتياجك، وسنساعدك على تحويل فكرتك إلى نتيجة احترافية.</p></div><div className="service-grid">{services.map((service) => <article className="service-card" key={service.name}><span className="service-icon">{service.icon}</span><h3>{service.name}</h3><p>{service.description}</p><div><strong>{service.price}</strong><a href="#request">اطلب الآن <span>←</span></a></div></article>)}</div></div></section>
 
-            <div className="request-box">
-              <div className="request-icon alt-2">🎓</div>
-              <div>
-                <strong>دراسة ورسالة</strong>
-                <small>مراجعة نهائية</small>
-              </div>
-              <span className="chip chip-gold">قريب</span>
-            </div>
+        <section className="section process" id="steps"><div className="section-heading center"><span className="section-kicker">رحلتك مع موثوق</span><h2>أربع خطوات تفصلك عن الإنجاز</h2></div><div className="steps-grid">{steps.map(([number, title, text]) => <article key={number}><span>{number}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div></section>
 
-            <div className="progress-ring-wrap">
-              <div className="progress-ring">
-                <span>92%</span>
-              </div>
-              <div className="progress-text">
-                <strong>معدل الرضا</strong>
-                <small>من العملاء</small>
-              </div>
-            </div>
-          </div>
-        </div>
+        <section className="request-section" id="request"><div className="container request-layout"><div className="request-intro"><span className="section-kicker">ابدأ الآن</span><h2>لديك إنجاز قادم؟<br /><em>دعنا نبدأه معاً.</em></h2><p>أرسل تفاصيل طلبك وسيتواصل معك فريق موثوق لتأكيد الخدمة والخطوات القادمة.</p><div className="contact-note"><span>✓</span><div><strong>رد سريع من فريقنا</strong><small>نتواصل معك خلال ساعات العمل</small></div></div></div><form className="request-form" onSubmit={submitRequest}><div className="form-title"><div><h3>اطلب خدمة أكاديمية</h3><p>املأ البيانات التالية وسنعود إليك قريباً.</p></div><span>مـ</span></div><label>نوع الخدمة<select name="service" value={form.service} onChange={updateForm}>{services.map((service) => <option key={service.name}>{service.name}</option>)}</select></label><div className="form-row"><label>الاسم الكامل<input name="name" value={form.name} onChange={updateForm} placeholder="أدخل اسمك" required /></label><label>البريد الإلكتروني<input type="email" name="email" value={form.email} onChange={updateForm} placeholder="name@example.com" required /></label></div><label>تفاصيل الطلب<textarea name="details" value={form.details} onChange={updateForm} placeholder="اكتب تفاصيل طلبك أو استفسارك..." rows="4" required /></label><button className="primary-btn submit-btn" type="submit">إرسال الطلب <span>←</span></button>{submitted && <div className="success-message">✓ تم استلام طلبك بنجاح، سيتواصل معك فريق موثوق قريباً.</div>}</form></div></section>
       </main>
-
-      <section className="stats-wrap">
-        <div className="container stats-grid">
-          {stats.map((item) => (
-            <div className="stat-card" key={item.label}>
-              <div className="stat-icon">{item.icon}</div>
-              <div className="stat-value">{item.value}</div>
-              <div className="stat-label">{item.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="container features" id="about">
-        <div className="section-heading">
-          <span>لماذا نحن؟</span>
-          <h2>خدمات متكاملة لتسريع رحلتك الأكاديمية</h2>
-        </div>
-
-        <div className="feature-grid">
-          {features.map((feature) => (
-            <article className="feature-card" key={feature.title}>
-              <div className="feature-icon-box">{feature.icon}</div>
-              <h3>{feature.title}</h3>
-              <p>{feature.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="services-section" id="services">
-        <div className="container">
-          <div className="section-heading center">
-            <span>خدماتنا</span>
-            <h2>حلول احترافية لكل احتياج أكاديمي</h2>
-          </div>
-
-          <div className="service-grid">
-            {services.map((service) => (
-              <div className="service-card" key={service.name}>
-                <div className="service-icon-box">{service.icon}</div>
-                <h3>{service.name}</h3>
-                <p>
-                  خدمة دقيقة ومخصصة لتلبية متطلباتك الأكاديمية مع متابعة مستمرة وجودة عالية.
-                </p>
-                <div className="service-footer">
-                  <strong>{service.price}</strong>
-                  <button>طلب الخدمة</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="process-section" id="process">
-        <div className="container">
-          <div className="section-heading center">
-            <span>كيف نعمل؟</span>
-            <h2>عملية واضحة، سریعة، واحترافية</h2>
-          </div>
-
-          <div className="process-grid">
-            {process.map((item) => (
-              <div className="process-card" key={item.step}>
-                <span className="process-step">{item.step}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="cta-section" id="contact">
-        <div className="container cta-box">
-          <div>
-            <span>ابدأ الآن</span>
-            <h2>أنشئ طلبك واستفد من تجربة أكاديمية مميزة</h2>
-          </div>
-          <button className="primary-btn">تواصل معنا</button>
-        </div>
-      </section>
-
-      <footer className="footer">
-        <div className="container footer-inner">
-          <div>© 2026 منصة موثوق</div>
-          <div>جميع الحقوق محفوظة</div>
-        </div>
-      </footer>
+      <footer className="footer"><div className="container footer-inner"><a className="brand" href="#home"><div className="brand-mark">م</div><b>موثوق</b></a><p>منصة رقمية للخدمات الأكاديمية في سلطنة عُمان</p><span>© 2026 Mawthooq</span></div></footer>
     </div>
   );
 }
