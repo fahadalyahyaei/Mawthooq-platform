@@ -1,347 +1,194 @@
-import { useState } from 'react';
+import './styles.css';
 
 const stats = [
-  { label: 'إيرادات اليوم', value: '12.4K', delta: '+18.2%', tone: 'green', icon: '💰' },
-  { label: 'العملاء النشطون', value: '24.8K', delta: '+12.4%', tone: 'blue', icon: '👥' },
-  { label: 'المشاريع', value: '368', delta: '+8.1%', tone: 'violet', icon: '📦' },
-  { label: 'معدل التحويل', value: '7.6%', delta: '-2.3%', tone: 'orange', icon: '📈' },
+  { label: 'الطلاب المسجلين', value: '24.8K', icon: '🎓' },
+  { label: 'الخدمات المنجزة', value: '3.6K', icon: '✅' },
+  { label: 'الجامعات المتعاقدة', value: '120', icon: '🏛️' },
+  { label: 'رضا العملاء', value: '96%', icon: '⭐' },
+];
+
+const features = [
+  {
+    icon: '📚',
+    title: 'خدمات أكاديمية متكاملة',
+    text: 'نوفر لك خدمات البحث العلمي، التوثيق، المراجعة، والدعم الأكاديمي بكل احترافية.',
+  },
+  {
+    icon: '⚡',
+    title: 'تجربة سريعة وسهلة',
+    text: 'واجهة مستخدم واضحة، تنقل سلس، وعمليات مريحة تدعم الطالب والباحث بشكل فوري.',
+  },
+  {
+    icon: '🔒',
+    title: 'أمان وخصوصية',
+    text: 'نراعي خصوصية بيانات المستخدمين ونضمن بيئة آمنة ومطمئنة في جميع المعاملات.',
+  },
 ];
 
 const services = [
-  { name: 'البحوث والتقارير', desc: 'إعداد وتحليل البحوث والأطروحات بحتوى احترافي.', icon: '📝', price: 'من 250 ر.ع' },
-  { name: 'الدراسات الأكاديمية', desc: 'خدمات دعم لأبحاث التخرج والدراسات الجامعية.', icon: '🎓', price: 'من 320 ر.ع' },
-  { name: 'التحليل الإحصائي', desc: 'تحليل البيانات وتفسير النتائج بشكل دقيق.', icon: '📊', price: 'من 180 ر.ع' },
-  { name: 'الرسائل العلمية', desc: 'مراجعة وتنسيق الرسائل العلمية والمشاريع.', icon: '📚', price: 'من 420 ر.ع' },
-];
-
-const requests = [
-  { title: 'إعداد بحث أكاديمي', meta: '4 عناصر جديدة', status: 'قيد التنفيذ', tone: 'blue' },
-  { title: 'تحديث نسخة المنصة', meta: 'إصدار 2.1', status: 'قيد المراجعة', tone: 'green' },
-  { title: 'إعداد تقارير', meta: 'تقرير الأداء', status: 'مؤجل', tone: 'gold' },
-  { title: 'حل المشكلات', meta: '3 أخطاء معلقة', status: 'حرج', tone: 'pink' },
-];
-
-const activities = [
-  { user: 'محمد', action: 'تمت إضافة مشروع جديد', time: 'منذ 18 دقيقة', tag: 'مشروع' },
-  { user: 'سارة', action: 'تم تحديث التقرير الشهري', time: 'منذ 1 ساعة', tag: 'تقارير' },
-  { user: 'خالد', action: 'تمت معالجة مخالفة', time: 'منذ 3 ساعات', tag: 'إدارة' },
-];
-
-const projects = [
-  { name: 'منصة المبيعات', owner: 'أحمد', progress: '82%', status: 'مكتمل', statusClass: 'done' },
-  { name: 'لوحة الدعم', owner: 'سارة', progress: '64%', status: 'قيد التنفيذ', statusClass: 'progress' },
-  { name: 'تطبيق العملاء', owner: 'خالد', progress: '41%', status: 'متأخر', statusClass: 'pending' },
-  { name: 'تجربة المستخدم', owner: 'لينا', progress: '93%', status: 'مكتمل', statusClass: 'done' },
+  { name: 'البحوث العلمية', price: 'من 250 ر.ع' },
+  { name: 'المراجعات الأكاديمية', price: 'من 180 ر.ع' },
+  { name: 'الرسائل الجامعية', price: 'من 420 ر.ع' },
+  { name: 'التحليل الإحصائي', price: 'من 220 ر.ع' },
 ];
 
 function App() {
-  const [form, setForm] = useState({
-    service: 'البحوث والتقارير',
-    name: '',
-    email: '',
-    details: '',
-  });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    alert(`تم إرسال طلب ${form.service} بنجاح، وسيتم التواصل مع ${form.name || 'العميل'} خلال ساعات.`);
-  };
-
   return (
-    <div className="app-shell">
+    <div className="landing-page">
       <header className="topbar">
         <div className="container nav-wrap">
           <div className="brand">
             <div className="brand-mark">م</div>
             <div>
               <div className="brand-name">موثوق</div>
-              <small>Platform</small>
+              <small>Academic Platform</small>
             </div>
           </div>
 
           <nav className="nav-links" aria-label="التنقل">
-            <a href="#" className="active">الرئيسية</a>
+            <a href="#home" className="active">الرئيسية</a>
             <a href="#services">الخدمات</a>
-            <a href="#dashboard">لوحة التحكم</a>
-            <a href="#orders">الطلبات</a>
-            <a href="#team">الفريق</a>
+            <a href="#about">من نحن</a>
+            <a href="#contact">تواصل معنا</a>
           </nav>
 
-          <div className="header-actions">
-            <div className="search-box">⌕ <input type="text" placeholder="بحث..." /></div>
-            <button className="icon-btn" aria-label="الإشعارات">🔔</button>
-            <div className="user-pill">
-              <div className="user-avatar">م</div>
-              <div>
-                <strong>محمد</strong>
-                <small>مدير المنصة</small>
-              </div>
-            </div>
-          </div>
+          <button className="primary-btn small-btn">ابدأ الآن</button>
         </div>
       </header>
 
-      <main className="container main-grid">
-        <section className="content-column">
-          <div className="panel hero-panel">
-            <div className="hero-copy">
-              <span className="eyebrow">منصة الخدمات الأكاديمية</span>
-              <h1>لوحة إدارة <span>موثوق</span></h1>
-              <p>
-                نربط الباحثين والمستخدمين بمقدمي الخدمات الأكاديمية داخل منصة ذكية، مع متابعة
-                الطلبات والإحصاءات والتواصل في بيئة احترافية وسريعة.
-              </p>
-              <div className="hero-actions">
-                <button className="primary-btn">إنشاء طلب جديد</button>
-                <button className="secondary-btn">استعراض الخدمات</button>
-              </div>
-            </div>
+      <main className="container hero" id="home">
+        <div className="hero-copy">
+          <span className="eyebrow">منصة رقمية أكاديمية متكاملة</span>
+          <h1>
+            بناؤك الأكاديمي يبدأ من <span>مكانٍ موثوق</span>
+          </h1>
+          <p>
+            نقدم لك خدمات تعليمية وبحثية احترافية تدعم طلابك والباحثين والجهات الأكاديمية
+            في كل خطوة، عبر منصة ذكية وسهلة الاستخدام.
+          </p>
 
-            <div className="overview-card">
-              <div className="card-top">
-                <strong>متابعة الطلبات</strong>
-                <span className="live-tag">● متصل الآن</span>
-              </div>
-
-              <div className="request-line">
-                <div className="mini-icon">📄</div>
-                <div>
-                  <b>إعداد بحث أكاديمي</b>
-                  <small>آخر تحديث: منذ 20 دقيقة</small>
-                </div>
-                <span className="mini-status good">قيد التنفيذ</span>
-              </div>
-
-              <div className="request-line">
-                <div className="mini-icon">📊</div>
-                <div>
-                  <b>تحليل إحصائي</b>
-                  <small>تم استلام العرض</small>
-                </div>
-                <span className="mini-status wait">متاح</span>
-              </div>
-
-              <div className="request-line">
-                <div className="mini-icon">🎓</div>
-                <div>
-                  <b>مراجعة رسالة علمية</b>
-                  <small>بانتظار التفاصيل</small>
-                </div>
-                <span className="mini-status new">جديد</span>
-              </div>
-            </div>
+          <div className="hero-actions">
+            <button className="primary-btn">احجز الخدمة</button>
+            <button className="secondary-btn">استعرض الخدمات</button>
           </div>
 
-          <div className="panel" id="dashboard">
-            <div className="panel-head">
+          <div className="mini-trust">
+            <div>
+              <strong>4.9/5</strong>
+              <span>تقييم المستخدمين</span>
+            </div>
+            <div>
+              <strong>24/7</strong>
+              <span>دعم فني مستمر</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="hero-card">
+          <div className="glass-panel">
+            <div className="card-head">
+              <span className="status-dot" />
+              <span>حالة الطلبات</span>
+            </div>
+
+            <div className="request-box">
+              <div className="request-icon">📄</div>
               <div>
-                <h3>نظرة عامة</h3>
-                <small>ملخص الأداء اليومي</small>
+                <strong>بحث أكاديمي</strong>
+                <small>قيد التنفيذ</small>
               </div>
-              <span className="badge success">+24.8%</span>
+              <span className="chip chip-blue">متقدم</span>
             </div>
 
-            <div className="stats-grid">
-              {stats.map((item) => (
-                <div className="stat-card" key={item.label}>
-                  <div className="stat-head">
-                    <span>{item.label}</span>
-                    <div className={`stat-icon ${item.tone}`}>{item.icon}</div>
-                  </div>
-                  <div className="stat-value">{item.value}</div>
-                  <div className={`trend ${item.tone}`}>{item.delta}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel chart-panel">
-            <div className="panel-head">
+            <div className="request-box">
+              <div className="request-icon alt">📊</div>
               <div>
-                <h3>مؤشرات الأداء</h3>
-                <small>آخر 7 أيام</small>
+                <strong>تحليل إحصائي</strong>
+                <small>جاهز للتسليم</small>
               </div>
-              <span className="badge blue">مستقر</span>
+              <span className="chip chip-green">جاهز</span>
             </div>
 
-            <div className="chart-box">
-              <svg viewBox="0 0 700 260" preserveAspectRatio="none" aria-label="مخطط الأداء">
-                <defs>
-                  <linearGradient id="lineFill" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(96,165,250,0.35)" />
-                    <stop offset="100%" stopColor="rgba(96,165,250,0)" />
-                  </linearGradient>
-                  <linearGradient id="lineStroke" x1="0" x2="1" y1="0" y2="0">
-                    <stop offset="0%" stopColor="#5eead4" />
-                    <stop offset="50%" stopColor="#60a5fa" />
-                    <stop offset="100%" stopColor="#a78bfa" />
-                  </linearGradient>
-                </defs>
-                <path d="M0,200 C80,175 120,160 180,170 S280,120 340,140 S430,90 500,120 S620,70 700,90 L700,260 L0,260 Z" fill="url(#lineFill)"/>
-                <path d="M0,200 C80,175 120,160 180,170 S280,120 340,140 S430,90 500,120 S620,70 700,90" fill="none" stroke="url(#lineStroke)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="500" cy="120" r="5" fill="#dff7ff" stroke="#60a5fa" strokeWidth="2" />
-                <circle cx="700" cy="90" r="5" fill="#dff7ff" stroke="#60a5fa" strokeWidth="2" />
-              </svg>
-            </div>
-          </div>
-
-          <div className="panel" id="orders">
-            <div className="panel-head">
+            <div className="request-box">
+              <div className="request-icon alt-2">🎓</div>
               <div>
-                <h3>أحدث المشاريع</h3>
-                <small>تحديثات هذا الأسبوع</small>
+                <strong>دراسة ورسالة</strong>
+                <small>مراجعة نهائية</small>
               </div>
-              <span className="badge neutral">14 مشروع</span>
-            </div>
-
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>المشروع</th>
-                    <th>المالك</th>
-                    <th>التقدم</th>
-                    <th>الحالة</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {projects.map((project) => (
-                    <tr key={project.name}>
-                      <td>
-                        <div className="project-name">
-                          <div className={`mini-logo ${project.name.length % 4}`}>{project.name.charAt(0)}</div>
-                          {project.name}
-                        </div>
-                      </td>
-                      <td>{project.owner}</td>
-                      <td>{project.progress}</td>
-                      <td><span className={`status ${project.statusClass}`}>{project.status}</span></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <span className="chip chip-gold">قريب</span>
             </div>
           </div>
-        </section>
-
-        <aside className="side-column">
-          <div className="panel small-panel">
-            <div className="panel-head">
-              <div>
-                <h3>المهام اليومية</h3>
-                <small>جدول الأعمال</small>
-              </div>
-              <span className="badge neutral">8 عناصر</span>
-            </div>
-
-            <div className="task-list">
-              {requests.map((item) => (
-                <div className="task-item" key={item.title}>
-                  <div className="task-main">
-                    <span className={`bullet ${item.tone}`} />
-                    <div>
-                      <strong>{item.title}</strong>
-                      <small>{item.meta}</small>
-                    </div>
-                  </div>
-                  <span className={`task-tag ${item.tone}`}>{item.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel small-panel">
-            <div className="panel-head">
-              <div>
-                <h3>آخر النشاطات</h3>
-                <small>العمليات الأخيرة</small>
-              </div>
-            </div>
-
-            <div className="activity-list">
-              {activities.map((item) => (
-                <div className="activity-item" key={item.action}>
-                  <div className="user-avatar small" style={{ background: 'linear-gradient(135deg, #60a5fa, #a78bfa)' }}>
-                    {item.user.charAt(0)}
-                  </div>
-                  <div className="activity-copy">
-                    <strong>{item.action}</strong>
-                    <small>{item.time}</small>
-                  </div>
-                  <span className="mini-tag">{item.tag}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel small-panel" id="services">
-            <div className="panel-head">
-              <div>
-                <h3>السوق والخدمات</h3>
-                <small>خدمات متاحة الآن</small>
-              </div>
-            </div>
-
-            <div className="service-list">
-              {services.map((service) => (
-                <div className="service-card" key={service.name}>
-                  <div className="service-head">
-                    <span className="service-icon">{service.icon}</span>
-                    <strong>{service.name}</strong>
-                  </div>
-                  <p>{service.desc}</p>
-                  <div className="service-foot">
-                    <span>{service.price}</span>
-                    <button>طلب</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel small-panel form-panel" id="team">
-            <div className="panel-head">
-              <div>
-                <h3>نموذج طلب الخدمة</h3>
-                <small>أرسل طلبك الآن</small>
-              </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="request-form">
-              <label>
-                <span>نوع الخدمة</span>
-                <select name="service" value={form.service} onChange={handleChange}>
-                  {services.map((service) => (
-                    <option value={service.name} key={service.name}>{service.name}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label>
-                <span>الاسم</span>
-                <input name="name" value={form.name} onChange={handleChange} placeholder="أدخل اسمك" required />
-              </label>
-
-              <label>
-                <span>البريد الإلكتروني</span>
-                <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="you@example.com" required />
-              </label>
-
-              <label>
-                <span>تفاصيل الطلب</span>
-                <textarea name="details" value={form.details} onChange={handleChange} rows="4" placeholder="اكتب تفاصيل طلبك هنا..." required />
-              </label>
-
-              <button type="submit" className="primary-btn full-width">إرسال الطلب</button>
-            </form>
-          </div>
-        </aside>
+        </div>
       </main>
+
+      <section className="stats-wrap">
+        <div className="container stats-grid">
+          {stats.map((item) => (
+            <div className="stat-card" key={item.label}>
+              <div className="stat-icon">{item.icon}</div>
+              <div className="stat-value">{item.value}</div>
+              <div className="stat-label">{item.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="container features" id="about">
+        <div className="section-heading">
+          <span>لماذا نحن؟</span>
+          <h2>خدمات متكاملة لتسريع رحلتك الأكاديمية</h2>
+        </div>
+
+        <div className="feature-grid">
+          {features.map((feature) => (
+            <article className="feature-card" key={feature.title}>
+              <div className="feature-icon-box">{feature.icon}</div>
+              <h3>{feature.title}</h3>
+              <p>{feature.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="services-section" id="services">
+        <div className="container">
+          <div className="section-heading center">
+            <span>خدماتنا</span>
+            <h2>حلول احترافية لكل احتياج أكاديمي</h2>
+          </div>
+
+          <div className="service-grid">
+            {services.map((service) => (
+              <div className="service-card" key={service.name}>
+                <div className="service-badge">{service.name}</div>
+                <h3>{service.name}</h3>
+                <p>خدمة دقيقة ومخصصة لتلبية متطلباتك الأكاديمية، مع متابعة مستمرة وجودة عالية.</p>
+                <div className="service-footer">
+                  <strong>{service.price}</strong>
+                  <button>طلب الخدمة</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="cta-section" id="contact">
+        <div className="container cta-box">
+          <div>
+            <span>ابدأ الآن</span>
+            <h2>أنشئ طلبك واستفد من تجربة أكاديمية مميزة</h2>
+          </div>
+          <button className="primary-btn">تواصل معنا</button>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <div className="container footer-inner">
+          <div>© 2026 منصة موثوق</div>
+          <div>جميع الحقوق محفوظة</div>
+        </div>
+      </footer>
     </div>
   );
 }
